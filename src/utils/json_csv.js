@@ -1,7 +1,5 @@
-const fs = require('fs')
 const converter = require('json-2-csv');
 //const filer = require('/home/david/node/xmlCsv/src/utils/createFile.js')
-
 
 
 
@@ -15,7 +13,7 @@ const jsonCsv = (a,callback)=>{
       
     }
     if(csv){
-        fs.writeFileSync('../files/output.csv',csv)  
+        // fs.writeFileSync('../../files/output.csv',csv)  
         callback(undefined,csv)
       
       }
@@ -24,7 +22,16 @@ const jsonCsv = (a,callback)=>{
 
 }
 
+// jsonCsv(data,(err,csv)=>{
+                    
+//   if(err){
+//       console.log('error in csv creating')
+//       return console.log(err,undefined)
+      
+//   }
+//   console.log(csv)
 
+// })
 
 
 

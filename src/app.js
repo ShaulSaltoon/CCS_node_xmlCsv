@@ -34,48 +34,61 @@ app.get('/xmlCsv', (req, res) => {
             //console.log(err)
             if(err){
                 return console.log(err)
+                res.send({err})
             }
             //res.send('parsing to json')
+            console.log(data)
             xmlJson.xmlJsonParser(data,(data)=>{
                 console.log('json :')
                 console.log(data)
-                //res.send('creating csv file')
+                
                 jsonCsv(data,(err,csv)=>{
-                    console.log('entered')
+                    
                     if(err){
                         console.log('error in csv creating')
-                        return console.log(err,)
+                         console.log(err,undefined)
+                        return res.send({error: err})
                     }
-
-                    workdriveApi.accessToken((error,data)=>{
-                        if(error){
-                            return console.log(error)
-                        }
-                        console.log(data)
-                        //res.send('uploading csv file to workdrive')
-                        workdriveApi.uploadFile(req.query.folderId,data.access_token,(err,data)=>{
-
-                            if(err){
-                                return console.log(err)
-                            } 
+                    console.log("created csv file")
+                    fs.writeFile(__dirname+'/output.csv',csv, err =>{
+                        if(err){
+                            
+                            return res.send({error: err})
+                        } 
+                        workdriveApi.accessToken((error,data)=>{
+                            if(error){
+                                return console.log(error)
+                            }
                             console.log(data)
-                            res.send({
+                            //res.send('uploading csv file to workdrive')
+                            workdriveApi.uploadFile(req.query.folderId,data.access_token,(err,data)=>{
 
-                                success: 'check your workdrive folder!',
-                                details: data
+                                if(err){
+                                    return res.send({err})
+                                } 
+                                //console.log(data)
+                                res.send({
+
+                                    success: 'check your workdrive folder!',
+                                    details: data
+                                    
+                                })
+                                fs.unlink('src/output.csv', (err) => {
+                                    if (err) {
+                                    console.error(err)
+                                    return
+                                    }
                                 
-                            })
-                            fs.unlink('../files/output.csv', (err) => {
-                                if (err) {
-                                  console.error(err)
-                                  return
-                                }
-                              
-                                //file removed
-                              })
+                                    //file removed
+                                })
 
+                            })
                         })
                     })
+
+                    
+                    
+                    
                 })
             })
     

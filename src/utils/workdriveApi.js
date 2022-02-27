@@ -60,7 +60,7 @@ const uploadFile =(parentId,accessToken,callback) =>{
         },
         formData: {
           'content': {
-            'value': fs.createReadStream('../files/output.csv'),
+            'value': fs.createReadStream('src/output.csv'),
             'options': {
               'filename': '',
               'contentType': null
